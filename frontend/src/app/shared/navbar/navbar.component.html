@@ -1,0 +1,28 @@
+<mat-toolbar color="primary" class="navbar">
+  <span class="brand">
+    <mat-icon>work</mat-icon>
+    MPloyChek
+  </span>
+  <span class="spacer"></span>
+  <ng-container *ngIf="auth.isLoggedIn">
+    <button mat-button routerLink="/dashboard">
+      <mat-icon>dashboard</mat-icon> Dashboard
+    </button>
+    <button mat-button routerLink="/admin/users" *ngIf="auth.isAdmin">
+      <mat-icon>manage_accounts</mat-icon> Manage Users
+    </button>
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <div class="user-info-menu">
+        <p class="user-name">{{ auth.currentUser?.name }}</p>
+        <p class="user-role">{{ auth.currentUser?.role }}</p>
+      </div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="auth.logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </button>
+    </mat-menu>
+  </ng-container>
+</mat-toolbar>

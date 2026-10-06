@@ -1,0 +1,55 @@
+<div class="login-page">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <div class="logo">
+        <mat-icon class="logo-icon">work</mat-icon>
+        <h1>MPloyChek</h1>
+        <p>Employee Management Portal</p>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>User ID</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput formControlName="userId" placeholder="Enter your user ID" />
+          <mat-error *ngIf="form.get('userId')?.hasError('required')">User ID is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <mat-icon matPrefix>lock</mat-icon>
+          <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" />
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Role</mat-label>
+          <mat-icon matPrefix>badge</mat-icon>
+          <mat-select formControlName="role">
+            <mat-option *ngFor="let r of roles" [value]="r">{{ r }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="error-msg" *ngIf="error">
+          <mat-icon>error_outline</mat-icon> {{ error }}
+        </div>
+
+        <button mat-raised-button color="primary" type="submit" class="full-width login-btn" [disabled]="loading">
+          <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+          <span *ngIf="!loading">Sign In</span>
+        </button>
+      </form>
+
+      <div class="demo-hint">
+        <p><strong>Demo Credentials:</strong></p>
+        <p>Admin: <code>admin01 / Admin@123</code></p>
+        <p>User: <code>user01 / User@123</code></p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

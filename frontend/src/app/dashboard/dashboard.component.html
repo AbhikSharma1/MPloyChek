@@ -1,0 +1,107 @@
+<app-navbar></app-navbar>
+
+<div class="dashboard-container">
+
+  <!-- Async loading indicator -->
+  <mat-progress-bar mode="indeterminate" *ngIf="loading" class="top-loader"></mat-progress-bar>
+
+  <ng-container *ngIf="!loading && user">
+
+    <!-- Profile Card -->
+    <div class="section-title">
+      <mat-icon>person</mat-icon>
+      <span>My Profile</span>
+      <mat-chip [color]="user.role === 'Admin' ? 'warn' : 'primary'" selected>{{ user.role }}</mat-chip>
+    </div>
+
+    <div class="profile-grid">
+      <mat-card class="profile-card">
+        <mat-card-content>
+          <div class="avatar">{{ user.name.charAt(0) }}</div>
+          <h2>{{ user.name }}</h2>
+          <p class="user-id">@{{ user.userId }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="info-card">
+        <mat-card-content>
+          <div class="info-row">
+            <mat-icon>email</mat-icon>
+            <div><label>Email</label><span>{{ user.email }}</span></div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="info-row">
+            <mat-icon>business</mat-icon>
+            <div><label>Department</label><span>{{ user.department }}</span></div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="info-row">
+            <mat-icon>event</mat-icon>
+            <div><label>Joined</label><span>{{ user.joinedDate }}</span></div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="info-row">
+            <mat-icon>circle</mat-icon>
+            <div><label>Status</label>
+              <mat-chip [color]="user.status === 'Active' ? 'primary' : 'warn'" selected>{{ user.status }}</mat-chip>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Records Table -->
+    <div class="section-title">
+      <mat-icon>assignment</mat-icon>
+      <span>{{ auth.isAdmin ? 'All Employment Records' : 'My Employment Records' }}</span>
+      <mat-chip color="accent" selected>{{ records.length }} records</mat-chip>
+    </div>
+
+    <mat-card class="table-card">
+      <mat-card-content>
+        <div *ngIf="records.length === 0" class="empty-state">
+          <mat-icon>inbox</mat-icon>
+          <p>No records found</p>
+        </div>
+        <table mat-table [dataSource]="records" class="records-table" *ngIf="records.length > 0">
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let r">
+              <mat-chip>{{ r.type }}</mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let r">{{ r.description }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let r">{{ r.date }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let r">
+              <mat-chip [color]="getStatusColor(r.status)" selected>{{ r.status }}</mat-chip>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="recordColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: recordColumns;"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+
+  </ng-container>
+
+  <!-- Skeleton while loading -->
+  <ng-container *ngIf="loading">
+    <div class="loading-hint">
+      <mat-icon>hourglass_top</mat-icon>
+      <p>Loading your data asynchronously... (API delay: {{ auth.currentUser?.role === 'Admin' ? '1.5s' : '1.5s' }})</p>
+    </div>
+  </ng-container>
+
+</div>
